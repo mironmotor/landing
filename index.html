@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI-ассистент под ключ — Настройка OpenClaw</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0a0a0a;
+      color: #e0e0e0;
+      line-height: 1.6;
+    }
+    .container { max-width: 800px; margin: 0 auto; padding: 0 24px; }
+    
+    /* Hero */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 60px 24px;
+      background: radial-gradient(ellipse at top, #1a1a2e 0%, #0a0a0a 70%);
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 6vw, 3.5rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, #fff 0%, #a78bfa 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero p {
+      font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+      color: #888;
+      max-width: 600px;
+      margin: 0 auto 32px;
+    }
+    .hero .badge {
+      display: inline-block;
+      padding: 6px 16px;
+      background: rgba(167, 139, 250, 0.15);
+      border: 1px solid rgba(167, 139, 250, 0.3);
+      border-radius: 999px;
+      font-size: 0.85rem;
+      color: #a78bfa;
+      margin-bottom: 24px;
+    }
+    .cta-btn {
+      display: inline-block;
+      padding: 16px 40px;
+      background: #a78bfa;
+      color: #000;
+      font-weight: 700;
+      font-size: 1.1rem;
+      border: none;
+      border-radius: 12px;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .cta-btn:hover { background: #c4b5fd; transform: translateY(-2px); }
+    
+    /* Sections */
+    section { padding: 80px 0; }
+    section h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 40px;
+      text-align: center;
+    }
+    
+    /* What you get */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+    .card {
+      background: #111;
+      border: 1px solid #222;
+      border-radius: 16px;
+      padding: 32px;
+      transition: border-color 0.2s;
+    }
+    .card:hover { border-color: #a78bfa44; }
+    .card .icon { font-size: 2rem; margin-bottom: 16px; }
+    .card h3 { font-size: 1.2rem; margin-bottom: 8px; color: #fff; }
+    .card p { color: #888; font-size: 0.95rem; }
+    
+    /* Pricing */
+    .pricing { text-align: center; }
+    .price-cards { display: flex; flex-wrap: wrap; gap: 24px; justify-content: center; }
+    .price-card {
+      background: #111;
+      border: 1px solid #222;
+      border-radius: 16px;
+      padding: 40px 32px;
+      flex: 1;
+      min-width: 260px;
+      max-width: 360px;
+      position: relative;
+    }
+    .price-card.featured { border-color: #a78bfa; background: #15102a; }
+    .price-card .tag {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #a78bfa;
+      color: #000;
+      padding: 4px 16px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+    .price-card h3 { font-size: 1.3rem; color: #fff; margin-bottom: 8px; }
+    .price-card .price {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin: 16px 0;
+      color: #a78bfa;
+    }
+    .price-card ul {
+      list-style: none;
+      text-align: left;
+      margin: 24px 0;
+    }
+    .price-card ul li {
+      padding: 8px 0;
+      color: #aaa;
+      font-size: 0.95rem;
+    }
+    .price-card ul li::before {
+      content: "✓ ";
+      color: #a78bfa;
+      font-weight: 700;
+    }
+    
+    /* Process */
+    .steps { max-width: 600px; margin: 0 auto; }
+    .step {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 32px;
+    }
+    .step-num {
+      width: 40px;
+      height: 40px;
+      background: #a78bfa;
+      color: #000;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+    .step h3 { color: #fff; margin-bottom: 4px; }
+    .step p { color: #888; font-size: 0.95rem; }
+    
+    /* CTA section */
+    .final-cta {
+      text-align: center;
+      padding: 100px 24px;
+    }
+    .final-cta h2 {
+      font-size: clamp(1.8rem, 5vw, 2.5rem);
+      margin-bottom: 16px;
+    }
+    .final-cta p { color: #888; margin-bottom: 32px; font-size: 1.1rem; }
+    
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 40px;
+      color: #444;
+      font-size: 0.85rem;
+      border-top: 1px solid #1a1a1a;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Hero -->
+<div class="hero">
+  <div>
+    <div class="badge">🪬 OpenClaw • AI-ассистент под ключ</div>
+    <h1>Ваш личный AI-помощник<br>за 1 день</h1>
+    <p>Установлю и настрою персонального бота в Telegram, Discord или Slack — который автоматизирует рутину, задачи и коммуникацию</p>
+    <a href="https://t.me/mironmotor" class="cta-btn" target="_blank">Написать в Telegram</a>
+  </div>
+</div>
+
+<!-- What you get -->
+<section>
+  <div class="container">
+    <h2>Что входит в настройку</h2>
+    <div class="grid">
+      <div class="card">
+        <div class="icon">🤖</div>
+        <h3>Установка OpenClaw</h3>
+        <p>Развёртывание на вашем сервере или хостинге (Fly.io, VPS, локальная машина)</p>
+      </div>
+      <div class="card">
+        <div class="icon">💬</div>
+        <h3>Telegram / Discord / Slack</h3>
+        <p>Подключение каналов — бот отвечает на сообщения, работает с контекстом</p>
+      </div>
+      <div class="card">
+        <div class="icon">🧠</div>
+        <h3>Промпт под ваш бизнес</h3>
+        <p>Настройка поведения бота под вашу нишу, стиль общения и задачи</p>
+      </div>
+      <div class="card">
+        <div class="icon">🔌</div>
+        <h3>Плагины</h3>
+        <p>Календарь, почта, поиск в интернете, GitHub, базы данных — всё что нужно</p>
+      </div>
+      <div class="card">
+        <div class="icon">📊</div>
+        <h3>Трекер задач</h3>
+        <p>AI-ассистент ведёт задачи, дедлайны, напоминает — без Trello и Notion</p>
+      </div>
+      <div class="card">
+        <div class="icon">🎓</div>
+        <h3>Обучение (1 час)</h3>
+        <p>Покажу как пользоваться, настраивать, добавлять новые функции</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Pricing -->
+<section class="pricing">
+  <div class="container">
+    <h2>Тарифы</h2>
+    <div class="price-cards">
+      <div class="price-card">
+        <h3>Старт</h3>
+        <div class="price">$250</div>
+        <ul>
+          <li>Установка OpenClaw</li>
+          <li>1 канал (Telegram)</li>
+          <li>Базовый промпт</li>
+          <li>30 мин обучения</li>
+        </ul>
+        <a href="https://t.me/mironmotor" class="cta-btn" style="font-size:0.95rem;padding:12px 32px;" target="_blank">Выбрать</a>
+      </div>
+      <div class="price-card featured">
+        <div class="tag">Популярный</div>
+        <h3>Бизнес</h3>
+        <div class="price">$500</div>
+        <ul>
+          <li>Всё из тарифа «Старт»</li>
+          <li>До 3 каналов</li>
+          <li>Кастомный промпт под нишу</li>
+          <li>Плагины (почта, календарь, поиск)</li>
+          <li>1 час обучения</li>
+          <li>2 недели поддержки</li>
+        </ul>
+        <a href="https://t.me/mironmotor" class="cta-btn" style="font-size:0.95rem;padding:12px 32px;" target="_blank">Выбрать</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Process -->
+<section>
+  <div class="container">
+    <h2>Как это работает</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div>
+          <h3>Пишете мне в Telegram</h3>
+          <p>Рассказываете, что хотите автоматизировать — я предлагаю решение</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div>
+          <h3>Настраиваю за 1 день</h3>
+          <p>Установка, подключение каналов, настройка промпта, плагинов</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div>
+          <h3>Обучение и передача</h3>
+          <p>Показываю как пользоваться, отвечать на вопросы, добавлять функции</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div>
+          <h3>Пользуетесь</h3>
+          <p>AI-ассистент работает 24/7 — экономит время и деньги</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Final CTA -->
+<section class="final-cta">
+  <div class="container">
+    <h2>Готовы делегировать рутину?</h2>
+    <p>Напишите мне — обсудим ваш кейс и подберём решение</p>
+    <a href="https://t.me/mironmotor" class="cta-btn" target="_blank">Написать →</a>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    Сделано Мироном Бочаровым • <a href="https://t.me/mironmotor" style="color:#a78bfa;text-decoration:none;" target="_blank">@mironmotor</a>
+  </div>
+</footer>
+
+</body>
+</html>
